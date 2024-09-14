@@ -5,7 +5,9 @@
 Create a REPL that allows users to:
 
 1. Track the books they've read and their rating of the book
+   Get the read list from good reads and read from csv
 2. Track the books they want to read
+   purchased bppks from amazon
 3. Suggests another book they might want to read based on passed ratings
 4. Display their reading stats - yearly, monthly or weekly
 5. Allows them to set up reading goals
@@ -13,6 +15,7 @@ Create a REPL that allows users to:
 7. Prints the report
 8. Spits out some HTML
 9. First attempt to try some HTML
+10. Get it spit out some ascii art based on the bookcover
 
 # What the project is:
 
