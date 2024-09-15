@@ -26,7 +26,10 @@ Create a REPL that allows users to:
 ### To Do
 
 - [ ] Choose an API
-- [ ] Set up a Repl
+- [x] Set up a Repl
+- [x] Pull Export from GoodReads
+- [x] Pull Read Books from Csv and marshal into json
+- [ ] Pull to read books from csv and marshal into json
 - [ ] Write out logic for to read lists
 - [ ] Write out logic for read lists
 - [ ] Recommend a book

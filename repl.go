@@ -71,27 +71,27 @@ func getCommands() map[string] cliCommand {
 		callback: commandExit,
 	},
 	"read" : {
-		name: "markRead",
+		name: "read",
 		description: "marks a book as read",
 		callback: commandReaddit,
 	},
 	"new-to-read" : {
-		name: "addToRead",
+		name: "new-to-read",
 		description: "adds book to reading list",
 		callback: commandAddToList,
 	},
 	"delete-read" : {
-		name: "removeRead",
+		name: "delete-read",
 		description: "removes a book from read",
 		callback: commandRemoveRead,
 	},
 	"delete-to-read" : {
-		name: "removeList",
+		name: "delete-to-read",
 		description: "removes a book from list",
 		callback: commandRemoveList,
 	},
 	"parse-csv" : {
-		name: "parseCSV",
+		name: "parse-csv",
 		description: "takes uploaded goodreads reading lists and to read list and parses it",
 		callback: commandParseCSV,
 	},
