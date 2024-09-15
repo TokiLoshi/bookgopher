@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/TokiLoshi/bookgopher/internal/gobookapi"
+	"github.com/TokiLoshi/bookgopher/internal/models/books"
 )
 
 type cliCommand struct {
@@ -17,6 +18,7 @@ type cliCommand struct {
 
 type config struct {
 	goapiClient gobookapi.Client 
+	Books books.BooksService 
 }
 
 func startRepl(cfg *config) {
@@ -87,6 +89,11 @@ func getCommands() map[string] cliCommand {
 		name: "removeList",
 		description: "removes a book from list",
 		callback: commandRemoveList,
+	},
+	"parse-csv" : {
+		name: "parseCSV",
+		description: "takes uploaded goodreads reading lists and to read list and parses it",
+		callback: commandParseCSV,
 	},
 }
 }
