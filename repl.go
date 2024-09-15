@@ -5,15 +5,21 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/TokiLoshi/bookgopher/internal/gobookapi"
 )
 
 type cliCommand struct {
 	name string 
 	description string 
-	callback func() error
+	callback func(*config, ...string) error
 }
 
-func startRepl() {
+type config struct {
+	goapiClient gobookapi.Client 
+}
+
+func startRepl(cfg *config) {
 	fmt.Println("===========================")
 	fmt.Println("Starting GoPher Books REPL")
 	fmt.Println("===========================")
@@ -29,8 +35,9 @@ func startRepl() {
 			continue
 		}
 		commandName := string(words[0])
+		args := []string{}
 		if command, ok := getCommands()[commandName]; ok {
-			err := command.callback()
+			err := command.callback(cfg, args...)
 			if err != nil {
 				fmt.Printf("Error from %v command\n", command)
 			}
@@ -60,6 +67,26 @@ func getCommands() map[string] cliCommand {
 		name: "exit", 
 		description: "exits the program",
 		callback: commandExit,
+	},
+	"read" : {
+		name: "markRead",
+		description: "marks a book as read",
+		callback: commandReaddit,
+	},
+	"new-to-read" : {
+		name: "addToRead",
+		description: "adds book to reading list",
+		callback: commandAddToList,
+	},
+	"delete-read" : {
+		name: "removeRead",
+		description: "removes a book from read",
+		callback: commandRemoveRead,
+	},
+	"delete-to-read" : {
+		name: "removeList",
+		description: "removes a book from list",
+		callback: commandRemoveList,
 	},
 }
 }
