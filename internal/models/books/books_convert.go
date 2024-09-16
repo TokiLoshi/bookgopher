@@ -5,9 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strconv"
-	"strings"
-	"time"
+
+	"github.com/TokiLoshi/bookgopher/internal/utils"
 )
 
 type BooksService interface {
@@ -53,41 +52,44 @@ func (b *BooksHandler) ConvertBooks(path string) ([]BooksRead, []ToRead, error) 
 		// Parse in read books to the BooksRead Struct
 		if exclusiveShelf == "read" {
 			book := BooksRead {
-				BookId: atoi(record[0]),
+				BookId: utils.Atoi(record[0]),
 				Title: record[1],
 				Author: record[2],
 				AuthorLF: record[3],
 				AdditionalAuthors: record[4],
-				ISBN: cleanString(record[5]),
-				ISBN13: cleanString(record[6]),
-				MyRating: atof(record[7]),
-				AverageRating: atof(record[8]),
+				ISBN: utils.CleanString(record[5]),
+				ISBN13: utils.CleanString(record[6]),
+				MyRating: utils.Atof(record[7]),
+				AverageRating: utils.Atof(record[8]),
 				Publisher: record[9],
 				Binding: record[10],
-				PageNumbers: atoi(record[11]),
+				PageNumbers: utils.Atoi(record[11]),
 				YearPublished: record[12],
 				OriginalPublicationYear: record[13],
-				DateRead: parseTime(record[15]),
+				DateRead: utils.ParseTime(record[15]),
 				MyReview: record[19],
 			}
 			booksRead = append(booksRead, book)
-		} else {
+		} else if exclusiveShelf == "to-read" {
+			fmt.Printf("To Read with title: %v and record 16: %v\n", record[1], record[16])
 			book := ToRead {
-				BookId: atoi(record[0]),
+				BookId: utils.Atoi(record[0]),
 				Title: record[1],
 				Author: record[2],
 				AuthorLF: record[3],
 				AdditionalAuthors: record[4],
-				ISBN: cleanString(record[5]),
-				ISBN13: cleanString(record[6]),
-				AverageRating: atof(record[8]),
+				ISBN: utils.CleanString(record[5]),
+				ISBN13: utils.CleanString(record[6]),
+				AverageRating: utils.Atof(record[8]),
 				Publisher: record[9],
-				PageNumbers: atoi(record[11]),
+				PageNumbers: utils.Atoi(record[11]),
 				YearPublished: record[12],
 				OriginalPublicationYear: record[13],
-				DateAdded: parseTime(record[16]),
+				DateAdded: utils.ParseTime(record[15]),
 			}
 			toBeRead = append(toBeRead, book)
+		} else {
+			continue
 		}
 	
 	}
@@ -122,34 +124,5 @@ func (b *BooksHandler) ConvertBooks(path string) ([]BooksRead, []ToRead, error) 
 	return booksRead, toBeRead, nil
 }
 
-func atoi(s string) int {
-	convertedInt, err := strconv.Atoi(s)
-	if err != nil {
-		fmt.Printf("error converting string to int: %v", err)
-		return 0
-	}
-	return convertedInt
-}
 
-func atof(s string) float64 {
-	convertedFloat, err := strconv.ParseFloat(s, 64)
-	if err != nil {
-		fmt.Printf("error converting string to float64, %v", err)
-		return 0.0
-	}
-	return convertedFloat
-}
 
-func cleanString(s string) string {
-	cleanedString := strings.Trim(s, "=\"")
-	return cleanedString
-}
-
-func parseTime(s string) time.Time  {
-	dateRead, err := time.Parse("2006/01/02", s)
-	if err != nil {
-		fmt.Printf("error converting time: %v", err)
-		return time.Time{}
-	}
-	return dateRead
-}

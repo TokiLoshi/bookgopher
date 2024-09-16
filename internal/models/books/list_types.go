@@ -3,30 +3,30 @@ package books
 import "time"
 
 // Records structure in CSV
-// 1 - BookId
-// 2 - Title
-// 3 - Author
-// 4 - Author l-f
-// 5 - Additional Authors
-// 6 - ISBN
-// 7 - ISBN13
-// 8 - My Rating
-// 9 - Average Rating
-// 10 - Publisher
-// 11 - Binding
-// 12 - Number of Pages
-// 13 - Year Published
-// 14 - Original Publication Year
-// 15 - Date Read
-// 16 - Date Added
-// 17 - Bookshelves
-// 18 - Bookshelves with positions
-// 19 - Exclusive Shelf
-// 20 - My reivew
-// 21 - Spoiler
-// 22 - Private notes
-// 23 - Read Count
-// 24 - Owned Copies
+// 0 - BookId
+// 1 - Title
+// 2 - Author
+// 3 - Author l-f
+// 4 - Additional Authors
+// 5 - ISBN
+// 6 - ISBN13
+// 7 - My Rating
+// 8 - Average Rating
+// 9 - Publisher
+// 10 - Binding
+// 11 - Number of Pages
+// 12 - Year Published
+// 13 - Original Publication Year
+// 14 - Date Read
+// 15 - Date Added
+// 16 - Bookshelves
+// 17 - Bookshelves with positions
+// 18 - Exclusive Shelf
+// 19 - My reivew
+// 20 - Spoiler
+// 21 - Private notes
+// 22 - Read Count
+// 23 - Owned Copies
 
 type BooksRead struct {
 	BookId                  int
