@@ -11,7 +11,7 @@ func commandParseCSV(cfg *config, args ...string) error {
 	goodReads := "goodreadsExport.csv"
 	bookPath := "./input/" + goodReads
 	fmt.Printf("Parsing CSV located at %v\n", bookPath)
-	_, err := cfg.Books.ConvertBooks(bookPath)
+	_, _, err := cfg.Books.ConvertBooks(bookPath)
 	if err != nil {
 		fmt.Println("something went wrong after trying to convert the books")
 	}

@@ -53,16 +53,13 @@ type ToRead struct {
 	Title                   string
 	Author                  string
 	AuthorLF                string
-	AdditionalAuthors       []string
+	AdditionalAuthors       string
 	ISBN                    string
 	ISBN13                  string
-	MyRating                float64
 	AverageRating           float64
 	Publisher               string
-	Binding                 string
 	PageNumbers             int
 	YearPublished           string
 	OriginalPublicationYear string
 	DateAdded               time.Time
-	Genres                  []string
 }

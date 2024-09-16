@@ -11,7 +11,7 @@ import (
 )
 
 type BooksService interface {
-	ConvertBooks(path string) ([]BooksRead, error)
+	ConvertBooks(path string) ([]BooksRead, []ToRead, error)
 }
 
 type BooksHandler struct{}
@@ -20,17 +20,18 @@ func NewBooksHandler() *BooksHandler {
 	return &BooksHandler{}
 }
 
-func (b *BooksHandler) ConvertBooks(path string) ([]BooksRead, error) {
+func (b *BooksHandler) ConvertBooks(path string) ([]BooksRead, []ToRead, error) {
 
 	var booksRead []BooksRead
+	var toBeRead []ToRead
 	if len(path) == 0 {
-		return booksRead, fmt.Errorf("need a file path")
+		return booksRead, toBeRead, fmt.Errorf("need a file path")
 	}
 
 	// Read in contents of csv 
 	file, err := os.Open(path)
 	if err != nil {
-		return booksRead, fmt.Errorf("issue opening csv: %w", err)
+		return booksRead, toBeRead, fmt.Errorf("issue opening csv: %w", err)
 	}
 	defer file.Close()
 
@@ -39,7 +40,7 @@ func (b *BooksHandler) ConvertBooks(path string) ([]BooksRead, error) {
 
 	records, err := reader.ReadAll()
 	if err != nil {
-		return booksRead, fmt.Errorf("error reading records: %w", err)
+		return booksRead, toBeRead, fmt.Errorf("error reading records: %w", err)
 	}
 	
 	// Add records to struct 
@@ -70,30 +71,55 @@ func (b *BooksHandler) ConvertBooks(path string) ([]BooksRead, error) {
 				MyReview: record[19],
 			}
 			booksRead = append(booksRead, book)
+		} else {
+			book := ToRead {
+				BookId: atoi(record[0]),
+				Title: record[1],
+				Author: record[2],
+				AuthorLF: record[3],
+				AdditionalAuthors: record[4],
+				ISBN: cleanString(record[5]),
+				ISBN13: cleanString(record[6]),
+				AverageRating: atof(record[8]),
+				Publisher: record[9],
+				PageNumbers: atoi(record[11]),
+				YearPublished: record[12],
+				OriginalPublicationYear: record[13],
+				DateAdded: parseTime(record[16]),
+			}
+			toBeRead = append(toBeRead, book)
 		}
-
-		// ToDo: 
-		// do the same for the ToRead struct
 	
 	}
 	
 	// Marshal the json 
 	booksReadJSON, err := json.MarshalIndent(booksRead, "", "  ")
 	if err != nil {
-		return booksRead, fmt.Errorf("error marshalling the json")
+		return booksRead, toBeRead, fmt.Errorf("error marshalling read list into json")
+	}
+
+	booksToReadJSON, err := json.MarshalIndent(toBeRead, "", " ")
+	if err != nil {
+		return booksRead, toBeRead, fmt.Errorf("error marshalling to be read list into json")
 	}
 	
 	// Save the json file to disk
-	outfilePath := "./output/books_read.json"
-	err = os.WriteFile(outfilePath, booksReadJSON, 0644)
+	readOutfilePath := "./output/books_read.json"
+	err = os.WriteFile(readOutfilePath, booksReadJSON, 0644)
 	
 	if err != nil {
-		return booksRead, fmt.Errorf("error writing the json")
+		return booksRead, toBeRead, fmt.Errorf("error writing the read list into json")
 
 	}
 	fmt.Println("Json saved successfully")
+
+	toReadOutfilePath := "./output/books_to_read.json"
+	err = os.WriteFile(toReadOutfilePath, booksToReadJSON, 0644)
+	if err != nil {
+		return booksRead, toBeRead, fmt.Errorf("error writing to be read list into json")
+	}
 	// save to the outputs folder 
-	return booksRead, nil
+	return booksRead, toBeRead, nil
 }
 
 func atoi(s string) int {
